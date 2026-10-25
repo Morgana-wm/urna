@@ -1,0 +1,68 @@
+rules_version = '2';
+
+// Regras de segurança do banco de dados (Cloud Firestore).
+// Copie TODO este arquivo para: Console do Firebase > Firestore Database > Regras > Publicar.
+//
+// Troque COLE_SEU_UID_AQUI pelo UID da sua conta de administrador
+// (Console do Firebase > Authentication > Usuários > coluna "UID do usuário").
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function isAdmin() {
+      return request.auth != null && request.auth.uid == "COLE_SEU_UID_AQUI";
+    }
+
+    function votacaoAberta() {
+      return get(/databases/$(database)/documents/config/eleicao).data.aberta == true;
+    }
+
+    function eleitor() {
+      return /databases/$(database)/documents/eleitores/$(request.auth.uid);
+    }
+
+    function votoValido(v) {
+      return v is string && v.size() <= 6;
+    }
+
+    // Candidatos: todo mundo vê, só o admin altera
+    match /candidatos/{id} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    // Votação aberta/fechada: todo mundo vê, só o admin altera
+    match /config/{id} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    // Registro de "este aparelho já votou" (não guarda o voto)
+    match /eleitores/{uid} {
+      allow get: if request.auth != null && (request.auth.uid == uid || isAdmin());
+      allow list, delete: if isAdmin();
+      allow create: if request.auth != null
+                    && request.auth.uid == uid
+                    && votacaoAberta()
+                    && request.resource.data.keys().hasOnly(['votou']);
+      allow update: if false;
+    }
+
+    // Cédulas: os votos, SEM nenhuma identificação de quem votou.
+    // Só podem ser criadas junto com o registro do eleitor (uma vez por aparelho).
+    match /cedulas/{id} {
+      allow read, delete: if isAdmin();
+      allow create: if request.auth != null
+                    && votacaoAberta()
+                    && !exists(eleitor())
+                    && existsAfter(eleitor())
+                    && request.resource.data.keys().hasOnly(['presidente', 'governador', 'senador', 'depfederal'])
+                    && request.resource.data.keys().hasAll(['presidente', 'governador', 'senador', 'depfederal'])
+                    && votoValido(request.resource.data.presidente)
+                    && votoValido(request.resource.data.governador)
+                    && votoValido(request.resource.data.senador)
+                    && votoValido(request.resource.data.depfederal);
+      allow update: if false;
+    }
+  }
+}

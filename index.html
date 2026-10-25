@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <title>Urna Eletrônica</title>
+  <link rel="icon" href="brasao.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="urna.css">
+</head>
+<body>
+  <main class="urna" aria-label="Urna eletrônica">
+    <div class="corpo">
+      <section class="tela" id="tela" aria-live="polite"></section>
+
+      <section class="teclado" id="teclado">
+        <button class="tecla" data-n="1" style="grid-area:k1">1</button>
+        <button class="tecla" data-n="2" style="grid-area:k2">2</button>
+        <button class="tecla" data-n="3" style="grid-area:k3">3</button>
+        <button class="tecla" data-n="4" style="grid-area:k4">4</button>
+        <button class="tecla" data-n="5" style="grid-area:k5">5</button>
+        <button class="tecla" data-n="6" style="grid-area:k6">6</button>
+        <button class="tecla" data-n="7" style="grid-area:k7">7</button>
+        <button class="tecla" data-n="8" style="grid-area:k8">8</button>
+        <button class="tecla" data-n="9" style="grid-area:k9">9</button>
+        <button class="tecla" data-n="0" style="grid-area:k0">0</button>
+        <button class="acao branco" id="btnBranco" data-braille="branco" style="grid-area:br">BRANCO</button>
+        <button class="acao corrige" id="btnCorrige" data-braille="corrige" style="grid-area:co">CORRIGE</button>
+        <button class="acao confirma" id="btnConfirma" data-braille="confirma" style="grid-area:cf">CONFIRMA</button>
+      </section>
+    </div>
+
+    <footer class="rodape-urna">
+      <div class="marca"><img src="brasao.svg" alt=""><span>JUSTIÇA ELEITORAL</span></div>
+      <div class="etapa" id="etapaTxt"></div>
+      <button class="som" id="btnSom" aria-pressed="true">
+        <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M3 9v6h4l5 4V5L7 9H3z"/><path id="ondas" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" d="M16 8.5a5 5 0 0 1 0 7M18.5 6a8.5 8.5 0 0 1 0 12"/></svg>
+        <span>Som</span>
+      </button>
+    </footer>
+  </main>
+
+  <audio id="somTecla" src="tecla.mp3" preload="auto"></audio>
+  <audio id="somConfirma" src="confirma.mp3" preload="auto"></audio>
+  <audio id="somFim" src="fim.mp3" preload="auto"></audio>
+
+  <script type="module" src="urna.js"></script>
+</body>
+</html>

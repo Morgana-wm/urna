@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex">
+  <title>Painel do Administrador · Urna</title>
+  <link rel="icon" href="brasao.svg">
+  <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="admin.css">
+</head>
+<body>
+  <!-- LOGIN -->
+  <section id="telaLogin" class="login" hidden>
+    <form id="formLogin" class="cartao login-cartao">
+      <img src="brasao.svg" alt="" class="login-brasao">
+      <h1>Painel do Administrador</h1>
+      <p class="sub">Acesso restrito ao dono da eleição.</p>
+      <label>Senha
+        <input type="password" id="senha" autocomplete="current-password" required>
+      </label>
+      <button type="submit" class="btn primario">Entrar</button>
+      <p class="erro" id="erroLogin"></p>
+    </form>
+  </section>
+
+  <!-- PAINEL -->
+  <section id="telaPainel" hidden>
+    <header class="topo">
+      <div class="topo-marca">
+        <img src="brasao.svg" alt="">
+        <div><strong id="tituloEleicao">Eleição</strong><span>Painel do Administrador</span></div>
+      </div>
+      <nav class="abas">
+        <button class="aba ativa" data-aba="resultados">Resultados</button>
+        <button class="aba" data-aba="candidatos">Candidatos</button>
+        <button class="aba" data-aba="votacao">Votação</button>
+      </nav>
+      <button class="btn fantasma" id="btnSair">Sair</button>
+    </header>
+
+    <main class="conteudo">
+      <!-- RESULTADOS -->
+      <div class="painel-aba" id="aba-resultados">
+        <div class="resumo">
+          <div class="kpi"><span>Eleitores que votaram</span><strong id="kpiVotantes">0</strong></div>
+          <div class="kpi"><span>Situação</span><strong id="kpiSituacao">—</strong></div>
+        </div>
+        <p class="nota">Os votos são secretos: o painel mostra só a quantidade de votos de cada candidato, nunca quem votou.</p>
+        <div id="listaResultados"></div>
+      </div>
+
+      <!-- CANDIDATOS -->
+      <div class="painel-aba" id="aba-candidatos" hidden>
+        <form class="cartao" id="formCand">
+          <h2 id="tituloForm">Adicionar candidato</h2>
+          <div class="grade">
+            <label>Cargo
+              <select id="cCargo"></select>
+            </label>
+            <label>Número <small id="dicaDigitos"></small>
+              <input id="cNumero" inputmode="numeric" required>
+            </label>
+            <label>Nome na urna
+              <input id="cNome" maxlength="40" required>
+            </label>
+            <label>Partido (sigla)
+              <input id="cPartido" maxlength="20" required>
+            </label>
+            <label id="rotVice">Vice
+              <input id="cVice" maxlength="60">
+            </label>
+            <label>Foto
+              <input type="file" id="cFoto" accept="image/*">
+            </label>
+          </div>
+          <div class="previa-linha">
+            <div class="previa" id="previa"><span>Sem foto</span></div>
+            <div class="form-acoes">
+              <button type="submit" class="btn primario" id="btnSalvar">Salvar candidato</button>
+              <button type="button" class="btn fantasma" id="btnCancelar" hidden>Cancelar edição</button>
+              <p class="erro" id="erroCand"></p>
+            </div>
+          </div>
+        </form>
+        <div id="listaCandidatos"></div>
+      </div>
+
+      <!-- VOTAÇÃO -->
+      <div class="painel-aba" id="aba-votacao" hidden>
+        <div class="cartao">
+          <h2>Abrir / encerrar votação</h2>
+          <p>Enquanto a votação estiver encerrada, a urna mostra “VOTAÇÃO ENCERRADA” e ninguém consegue votar.</p>
+          <button class="btn primario" id="btnAlternar">—</button>
+        </div>
+        <div class="cartao perigo">
+          <h2>Zerar votação</h2>
+          <p>Apaga todos os votos e libera todos os aparelhos para votar de novo. Os candidatos continuam cadastrados. Não dá para desfazer.</p>
+          <button class="btn vermelho" id="btnZerar">Zerar todos os votos</button>
+        </div>
+      </div>
+    </main>
+  </section>
+
+  <section id="telaAviso" class="login" hidden>
+    <div class="cartao login-cartao"><h1 id="avisoTitulo"></h1><p id="avisoTexto"></p></div>
+  </section>
+
+  <script type="module" src="admin.js"></script>
+</body>
+</html>
